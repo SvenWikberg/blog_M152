@@ -18,29 +18,34 @@
     <body>
         <div>
             <img src="img/profile.png" alt="Profile">
-            <p>Bienvenue !</p>
+            <h1>Bienvenue !</h1>
         </div>
         <section id="posts">
         <?php
-
-            $medias = sqlSelectMedias();
-
-            foreach($medias as $media){
-                switch(explode('/',$media['typeMedia'])[0]) {
-                    case "image":
-                        echo '<img src="media/' . $media['nomFichierMedia'] . '" alt="">';
-                    break;
-                    case "audio":
-                        echo '  <audio controls>
-                                    <source src="media/' . $media['nomFichierMedia'] . '" type="' . $media['typeMedia'] . '">
-                                </audio>';
-                    break;
-                    case "video":
-                        echo '  <video height="200" controls loop autoplay muted>
-                                    <source src="media/' . $media['nomFichierMedia'] . '" type="' . $media['typeMedia'] . '">
-                                </video>';
-                    break;
+            $posts = sqlSelectPosts();
+            foreach($posts as $post){
+                echo '<div style="border-style: solid; border-width: 1px;">';
+                echo '<h2>' . $post['commentaire'] . '</h2>';
+                $medias = sqlSelectMediasByIdPost($post['isPost']);
+                foreach($medias as $media){
+                    switch(explode('/',$media['typeMedia'])[0]) {
+                        case "image":
+                            echo '<img src="media/' . $media['nomFichierMedia'] . '" alt="">';
+                        break;
+                        case "audio":
+                            echo '  <audio controls>
+                                        <source src="media/' . $media['nomFichierMedia'] . '" type="' . $media['typeMedia'] . '">
+                                    </audio>';
+                        break;
+                        case "video":
+                            echo '  <video height="200" controls loop autoplay muted>
+                                        <source src="media/' . $media['nomFichierMedia'] . '" type="' . $media['typeMedia'] . '">
+                                    </video>';
+                        break;
+                    }
                 }
+                echo '</div><br>';
+                
             }
         ?>
         </section>

@@ -26,6 +26,15 @@
         sqlInsertPosts($commentaire);
         $idPost = bddPDO()->lastInsertId();
 
+        for ($i = 0; $i < count($_FILES['file']['name']) ; $i++) {
+            $extension = explode('/',$_FILES['file']['type'][$i])[1];
+
+            if($extension == 'mp3' || $extension == 'ogg' || $extension == 'wav' || $extension == 'mp4' || $extension == 'webm' || $extension == 'png' || $extension == 'jpg' || $extension == 'jpeg' || $extension == 'gif'){
+                $bonFichier = true;
+            } else {
+                $bonFichier = false;
+            }
+        }
 
         for ($i = 0; $i < count($_FILES['file']['name']) ; $i++) {
 
@@ -45,7 +54,7 @@
             <label for="commentaire">Commentaire :</label><br>
             <textarea type="text" id="commentaire" name="commentaire" cols="30" rows="10"></textarea> 
             <br>
-            <label for="image">Image :</label>
+            <label for="file">Image/Audio/Video :</label>
             <input type="file" id="file" name="file[]" multiple accept="audio/*,video/*,image/*">
             <br>
             <input type="submit" value="Envoyer"/>

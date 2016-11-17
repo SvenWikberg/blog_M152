@@ -18,7 +18,9 @@
         $myPDO = bddPdo();
 
         try{
-            $myPDO->query("INSERT INTO posts VALUES(NULL, \"$commentaire\", NOW());");
+            $req = $myPDO->prepare("INSERT INTO posts VALUES(NULL, :commentaire, NOW());");
+            $req->bindParam(':commentaire', $commentaire, PDO::PARAM_STR);
+            $req->execute();
         } catch (Exception $e) {
             print_r($e);
         }
@@ -28,19 +30,33 @@
         $myPDO = bddPdo();
 
         try{
-            $myPDO->query('INSERT INTO medias VALUES(NULL, "' . $nomMedia . '", "' . $typeMedia . '", ' . $idPost . ');');
+            $req = $myPDO->prepare("INSERT INTO medias VALUES(NULL, :nomMedia, :typeMedia, :idPost);");
+            $req->bindParam(':nomMedia', $nomMedia, PDO::PARAM_STR);
+            $req->bindParam(':typeMedia', $typeMedia, PDO::PARAM_STR);
+            $req->bindParam(':idPost', $idPost, PDO::PARAM_INT);
+            $req->execute();
         } catch (Exception $e) {
             print_r($e);
         }
     }
-    function sqlSelectMedias(){
-    $myPDO = bddPdo();
-    $reqArray = $myPDO->query('SELECT * FROM medias')->fetchAll();
-    return $reqArray;
-}
 
-function print_rr($item){
-    echo '<pre>';
-    print_r($item);
-    echo '</pre>';
-}
+    function sqlSelectMediasByIdPost($id){
+        $myPDO = bddPdo();
+        $req = $myPDO->prepare("SELECT * FROM medias WHERE idPost = :id");
+        $req->bindParam(':id', $id, PDO::PARAM_INT);
+        $req->execute();
+        return $req->fetchAll();
+    }
+
+    function sqlSelectPosts(){
+        $myPDO = bddPdo();
+        $req = $myPDO->prepare("SELECT * FROM posts");
+        $req->execute();
+        return $req->fetchAll();
+    }
+
+    function print_rr($item){
+        echo '<pre>';
+        print_r($item);
+        echo '</pre>';
+    }
