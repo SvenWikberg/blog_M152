@@ -38,3 +38,9 @@
     $reqArray = $myPDO->query('SELECT * FROM medias')->fetchAll();
     return $reqArray;
 }
+
+function print_rr($item){
+    echo '<pre>';
+    print_r($item);
+    echo '</pre>';
+}

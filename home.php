@@ -23,12 +23,27 @@
         <section id="posts">
         <?php
 
-            $posts = sqlSelectMedias();
+            $medias = sqlSelectMedias();
 
-            foreach($posts as $post){
-                echo '<img src="media/' . $post['nomFichierMedia'] . '" alt="">';
+            foreach($medias as $media){
+                switch(explode('/',$media['typeMedia'])[0]) {
+                    case "image":
+                        echo '<img src="media/' . $media['nomFichierMedia'] . '" alt="">';
+                    break;
+                    case "audio":
+                        echo '  <audio controls>
+                                    <source src="media/' . $media['nomFichierMedia'] . '" type="' . $media['typeMedia'] . '">
+                                </audio>';
+                    break;
+                    case "video":
+                        echo '  <video height="200" controls loop autoplay muted>
+                                    <source src="media/' . $media['nomFichierMedia'] . '" type="' . $media['typeMedia'] . '">
+                                </video>';
+                    break;
+                }
             }
         ?>
         </section>
+        
     </body>
 </html>

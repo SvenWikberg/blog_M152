@@ -18,14 +18,23 @@
     <?php
     if(!empty($_POST)){
 
+
+        //print_rr($_FILES);
+
         $commentaire = $_POST['commentaire'];
 
         sqlInsertPosts($commentaire);
         $idPost = bddPDO()->lastInsertId();
 
-        for ($i = 0; $i < count($_FILES['image']['name']) ; $i++) {
-            move_uploaded_file($_FILES['image']['tmp_name'][$i], 'media/' . $_FILES['image']['name'][$i]);
-            sqlInsertMedias($_FILES['image']['type'][$i], $_FILES['image']['name'][$i], $idPost);
+
+        for ($i = 0; $i < count($_FILES['file']['name']) ; $i++) {
+
+            $tmp = sha1($_FILES['file']['name'][$i] . getdate()[0]);
+            $extension = explode('/',$_FILES['file']['type'][$i])[1];
+            $fileName = $tmp . '.' . $extension;
+
+            move_uploaded_file($_FILES['file']['tmp_name'][$i], 'media/' . $fileName);
+            sqlInsertMedias($_FILES['file']['type'][$i], $fileName, $idPost);
         }
         
         header('location: home.php');
@@ -37,7 +46,7 @@
             <textarea type="text" id="commentaire" name="commentaire" cols="30" rows="10"></textarea> 
             <br>
             <label for="image">Image :</label>
-            <input type="file" id="image" name="image[]" multiple accept="image/*">
+            <input type="file" id="file" name="file[]" multiple accept="audio/*,video/*,image/*">
             <br>
             <input type="submit" value="Envoyer"/>
         </form>
