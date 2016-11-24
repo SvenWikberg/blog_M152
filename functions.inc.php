@@ -48,6 +48,18 @@
         return $req->fetchAll();
     }
 
+    function sqlDeletePostMediaByIdPost($id){
+        $myPDO = bddPdo();
+
+        $req = $myPDO->prepare("DELETE FROM medias WHERE idPost = :id");
+        $req->bindParam(':id', $id, PDO::PARAM_INT);
+        $req->execute();
+
+        $req = $myPDO->prepare("DELETE FROM posts WHERE idPost = :id");
+        $req->bindParam(':id', $id, PDO::PARAM_INT);
+        $req->execute();
+    }
+
     function sqlSelectPosts(){
         $myPDO = bddPdo();
         $req = $myPDO->prepare("SELECT * FROM posts");
@@ -59,4 +71,17 @@
         echo '<pre>';
         print_r($item);
         echo '</pre>';
+    }
+
+    function testIfImageVideoAudio($files){
+        $check = true;
+        foreach($files['file']['type'] as $type){
+            $typeFiles = explode('/',$type)[0];
+            if($typeFiles == 'image' || $typeFiles == 'video' || $typeFiles == 'audio'){
+                
+            } else {
+                $check = false;
+            }
+        }
+        return $check;
     }

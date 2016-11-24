@@ -4,7 +4,7 @@
         <meta charset="utf-8">
         <title>Titre de la page</title>
         <link rel="stylesheet" href="style.css">
-        <script src="script.js"></script>
+        <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
     </head>
     <?php
         include_once("functions.inc.php");
@@ -24,9 +24,9 @@
         <?php
             $posts = sqlSelectPosts();
             foreach($posts as $post){
-                echo '<div style="border-style: solid; border-width: 1px;">';
+                echo '<div style="border-style: solid; border-width: 1px;"><a class="confirmation" href="delete.func.php?id=' . $post['idPost'] . '">delete</a>';
                 echo '<h2>' . $post['commentaire'] . '</h2>';
-                $medias = sqlSelectMediasByIdPost($post['isPost']);
+                $medias = sqlSelectMediasByIdPost($post['idPost']);
                 foreach($medias as $media){
                     switch(explode('/',$media['typeMedia'])[0]) {
                         case "image":
@@ -45,10 +45,13 @@
                     }
                 }
                 echo '</div><br>';
-                
             }
         ?>
         </section>
-        
+        <script type="text/javascript">
+            $('.confirmation').on('click', function () {
+                return confirm('Are you sure?');
+            });
+        </script>
     </body>
 </html>
