@@ -3,49 +3,27 @@
     <head>
         <meta charset="utf-8">
         <title>Titre de la page</title>
-        <link rel="stylesheet" href="style.css">
+        <link rel="stylesheet" href="css/bootstrap.min.css">
         <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
     </head>
     <?php
         include_once("functions.inc.php");
-    ?>
+        include_once("displayfunc.inc.php");
+?>
     <header>
-        <ul>
-            <li><a href="home.php">Home</a></li>
-            <li><a href="post.php">Post</a></li>
+        <ul class="navbar navbar-default navbar-fixed-top">
+            <li class="navbar-text"><a href="home.php">Home</a></li>
+            <li class="navbar-text"><a href="post.php">Post</a></li>
         </ul>
     </header>
-    <body>
+    <body style="padding-top: 70px;">
         <div>
             <img src="img/profile.png" alt="Profile">
             <h1>Bienvenue !</h1>
         </div>
         <section id="posts">
         <?php
-            $posts = sqlSelectPosts();
-            foreach($posts as $post){
-                echo '<div style="border-style: solid; border-width: 1px;"><a class="confirmation" href="delete.func.php?id=' . $post['idPost'] . '">delete</a>';
-                echo '<h2>' . $post['commentaire'] . '</h2>';
-                $medias = sqlSelectMediasByIdPost($post['idPost']);
-                foreach($medias as $media){
-                    switch(explode('/',$media['typeMedia'])[0]) {
-                        case "image":
-                            echo '<img src="media/' . $media['nomFichierMedia'] . '" alt="">';
-                        break;
-                        case "audio":
-                            echo '  <audio controls>
-                                        <source src="media/' . $media['nomFichierMedia'] . '" type="' . $media['typeMedia'] . '">
-                                    </audio>';
-                        break;
-                        case "video":
-                            echo '  <video height="200" controls loop autoplay muted>
-                                        <source src="media/' . $media['nomFichierMedia'] . '" type="' . $media['typeMedia'] . '">
-                                    </video>';
-                        break;
-                    }
-                }
-                echo '</div><br>';
-            }
+            displayPosts();
         ?>
         </section>
         <script type="text/javascript">

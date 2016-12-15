@@ -16,46 +16,11 @@
         </ul>
     </header>
     <?php
-    if(!empty($_POST)){
-        $isError = false; 
-        foreach($_FILES['file']['error'] as $error){
-            if($error == 1)
-                $isError = true;
+        try{
+            InsertPostMedias();
+        }catch (Exeption $e){
+            print_rr($e);
         }
-
-
-
-        if(!$isError && testIfImageVideoAudio($_FILES)){
-            $commentaire = $_POST['commentaire'];
-
-            sqlInsertPosts($commentaire);
-            $idPost = bddPDO()->lastInsertId();
-
-            for ($i = 0; $i < count($_FILES['file']['name']) ; $i++) {
-                $extension = explode('/',$_FILES['file']['type'][$i])[1];
-
-                if($extension == 'mp3' || $extension == 'ogg' || $extension == 'wav' || $extension == 'mp4' || $extension == 'webm' || $extension == 'png' || $extension == 'jpg' || $extension == 'jpeg' || $extension == 'gif'){
-                    $bonFichier = true;
-                } else {
-                    $bonFichier = false;
-                }
-            }
-
-            for ($i = 0; $i < count($_FILES['file']['name']) ; $i++) {
-
-                $tmp = sha1($_FILES['file']['name'][$i] . getdate()[0]);
-                $extension = explode('/',$_FILES['file']['type'][$i])[1];
-                $fileName = $tmp . '.' . $extension;
-
-                move_uploaded_file($_FILES['file']['tmp_name'][$i], 'media/' . $fileName);
-                sqlInsertMedias($_FILES['file']['type'][$i], $fileName, $idPost);
-            }
-            
-            header('location: home.php');
-        } else {
-            echo '<h1>Error</h1>';
-        }
-    }
     ?>
     <body>
         <form action="post.php" method="post" enctype="multipart/form-data">
